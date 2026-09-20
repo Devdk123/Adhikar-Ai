@@ -1,0 +1,18 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.egg-info/
+.venv/
+
+# env
+.env*
+!.env.example
+
+# Logs
+KMS/logs/*
+!KMS/logs/.gitkeep
+
+# IDE
+.vscode/
+.idea/

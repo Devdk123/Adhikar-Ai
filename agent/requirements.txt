@@ -1,0 +1,4 @@
+livekit-agents[silero,turn-detector,google]~=1.4
+livekit-plugins-noise-cancellation~=0.2
+python-dotenv
+playwright
