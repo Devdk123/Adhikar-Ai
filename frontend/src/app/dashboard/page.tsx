@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useMemo } from "react";
+import { useSyncExternalStore, useMemo } from "react";
 import { motion } from "framer-motion";
 import {
   CheckCircle2,
@@ -58,21 +58,19 @@ const staggerItem = {
 };
 
 export default function DashboardPage() {
-  const [applications, setApplications] = useState<StoredApplication[]>([]);
-
-  // Load from store + listen for real-time updates
-  useEffect(() => {
-    setApplications(getApplications());
-
-    const handler = () => setApplications(getApplications());
-    window.addEventListener("adhikaar:application-update", handler);
-    // Also re-read on focus (if user applied in chat tab then switches to dashboard)
-    window.addEventListener("focus", handler);
+  const subscribe = (onStoreChange: () => void) => {
+    window.addEventListener("adhikaar:application-update", onStoreChange);
+    window.addEventListener("focus", onStoreChange);
     return () => {
-      window.removeEventListener("adhikaar:application-update", handler);
-      window.removeEventListener("focus", handler);
+      window.removeEventListener("adhikaar:application-update", onStoreChange);
+      window.removeEventListener("focus", onStoreChange);
     };
-  }, []);
+  };
+  const applications = useSyncExternalStore(
+    subscribe,
+    getApplications,
+    () => [] as StoredApplication[],
+  );
 
   // Compute stats dynamically
   const stats = useMemo(() => {

@@ -278,10 +278,6 @@ function CustomControlBar({
   };
 
   useEffect(() => {
-    setMicEnabled(localParticipant.isMicrophoneEnabled);
-  }, [localParticipant.isMicrophoneEnabled]);
-
-  useEffect(() => {
     chatEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [chatMessages]);
 

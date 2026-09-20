@@ -51,7 +51,7 @@ const GradualBlur: React.FC<GradualBlurProps> = ({
     const direction = position === "top" ? "to top" : "to bottom";
 
     for (let i = 1; i <= divCount; i++) {
-      let progress = curveFunc(i / divCount);
+      const progress = curveFunc(i / divCount);
 
       const blurValue = exponential
         ? Math.pow(2, progress * 4) * 0.0625 * strength

@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useRef, useEffect, useState, useCallback } from "react";
+import React, { useRef, useEffect, useCallback } from "react";
 import { useRouter, usePathname } from "next/navigation";
 
 interface GooeyNavItem {
@@ -17,6 +17,18 @@ export interface GooeyNavProps {
   timeVariance?: number;
   colors?: number[];
 }
+
+const noise = (n = 1) => n / 2 - Math.random() * n;
+
+const getXY = (
+  distance: number,
+  pointIndex: number,
+  totalPoints: number,
+): [number, number] => {
+  const angle =
+    ((360 + noise(8)) / totalPoints) * pointIndex * (Math.PI / 180);
+  return [distance * Math.cos(angle), distance * Math.sin(angle)];
+};
 
 const GooeyNav: React.FC<GooeyNavProps> = ({
   items,
@@ -39,23 +51,7 @@ const GooeyNav: React.FC<GooeyNavProps> = ({
     return idx >= 0 ? idx : 0;
   }, [items, pathname]);
 
-  const [activeIndex, setActiveIndex] = useState<number>(getActiveIndex);
-
-  useEffect(() => {
-    setActiveIndex(getActiveIndex());
-  }, [pathname, getActiveIndex]);
-
-  const noise = (n = 1) => n / 2 - Math.random() * n;
-
-  const getXY = (
-    distance: number,
-    pointIndex: number,
-    totalPoints: number
-  ): [number, number] => {
-    const angle =
-      ((360 + noise(8)) / totalPoints) * pointIndex * (Math.PI / 180);
-    return [distance * Math.cos(angle), distance * Math.sin(angle)];
-  };
+  const activeIndex = getActiveIndex();
 
   const createParticle = (
     i: number,
@@ -63,13 +59,13 @@ const GooeyNav: React.FC<GooeyNavProps> = ({
     d: [number, number],
     r: number
   ) => {
-    let rotate = noise(r / 10);
+    const rotate = noise(r / 10);
     return {
       start: getXY(d[0], particleCount - i, particleCount),
       end: getXY(d[1] + noise(7), particleCount - i, particleCount),
       time: t,
       scale: 1 + noise(0.2),
-      color: colors[Math.floor(Math.random() * colors.length)],
+      color: colors[i % colors.length],
       rotate:
         rotate > 0 ? (rotate + r / 20) * 10 : (rotate - r / 20) * 10,
     };
@@ -137,7 +133,6 @@ const GooeyNav: React.FC<GooeyNavProps> = ({
     e.preventDefault();
     const liEl = e.currentTarget.parentElement as HTMLElement;
     if (activeIndex === index) return;
-    setActiveIndex(index);
     updateEffectPosition(liEl);
 
     if (filterRef.current) {

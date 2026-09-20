@@ -45,18 +45,18 @@ export const agentTrackToggleVariants = cva(['size-9'], {
 
 function getSourceIcon(source: Track.Source, enabled: boolean, pending = false) {
   if (pending) {
-    return LoaderIcon;
+    return <LoaderIcon className="animate-spin" />;
   }
 
   switch (source) {
     case Track.Source.Microphone:
-      return enabled ? MicIcon : MicOffIcon;
+      return enabled ? <MicIcon /> : <MicOffIcon />;
     case Track.Source.Camera:
-      return enabled ? VideoIcon : VideoOffIcon;
+      return enabled ? <VideoIcon /> : <VideoOffIcon />;
     case Track.Source.ScreenShare:
-      return enabled ? MonitorUpIcon : MonitorOffIcon;
+      return enabled ? <MonitorUpIcon /> : <MonitorOffIcon />;
     default:
-      return Fragment;
+      return <Fragment />;
   }
 }
 
@@ -132,7 +132,6 @@ export function AgentTrackToggle({
     () => (isControlled ? pressed : uncontrolledPressed) ?? false,
     [isControlled, pressed, uncontrolledPressed],
   );
-  const IconComponent = getSourceIcon(source as Track.Source, resolvedPressed, pending);
   const handlePressedChange = (nextPressed: boolean) => {
     if (!isControlled) {
       setUncontrolledPressed(nextPressed);
@@ -158,7 +157,7 @@ export function AgentTrackToggle({
       )}
       {...props}
     >
-      <IconComponent className={cn(pending && 'animate-spin')} />
+      {getSourceIcon(source as Track.Source, resolvedPressed, pending)}
       {props.children}
     </Toggle>
   );

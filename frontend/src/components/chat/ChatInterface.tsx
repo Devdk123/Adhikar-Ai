@@ -301,7 +301,8 @@ function ApplyButton({
   } | null>(null);
   const [captchaValue, setCaptchaValue] = useState("");
   const [acceptDeclaration, setAcceptDeclaration] = useState(false);
-  const sessionIdRef = useRef<string>(`chat-${Date.now()}`);
+  const [sessionId] = useState(() => `chat-${Date.now()}`);
+  const sessionIdRef = useRef<string>(sessionId);
 
   const handleApply = async () => {
     setStatus("filling");
