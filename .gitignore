@@ -1,0 +1,53 @@
+# Claude Code
+.claude/
+.mcp.json
+
+# Dependencies
+node_modules/
+.pnp/
+.pnp.js
+
+# Next.js
+frontend/.next/
+frontend/out/
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+.eggs/
+*.egg
+.venv/
+venv/
+
+# Environment (NEVER commit secrets)
+.env
+.env.local
+.env.*.local
+
+# OS
+.DS_Store
+Thumbs.db
+nul
+desktop.ini
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Build
+dist/
+build/
+
+# Misc
+*.log
+npm-debug.log*
+
+# Ruff
+.ruff_cache/
+
+# Docker
+.docker/
