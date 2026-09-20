@@ -1,0 +1,622 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PM-KISAN Application Portal | Government of India</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Segoe UI', Arial, sans-serif;
+      background: #f5f5f0;
+      color: #333;
+    }
+
+    /* Government-style header */
+    .gov-header {
+      background: linear-gradient(135deg, #1a472a 0%, #2d5a3f 100%);
+      color: white;
+      padding: 0;
+    }
+
+    .gov-header-top {
+      background: #0d2818;
+      padding: 4px 20px;
+      font-size: 11px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .gov-header-main {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      padding: 12px 20px;
+    }
+
+    .gov-emblem {
+      width: 60px;
+      height: 60px;
+      background: white;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 28px;
+      flex-shrink: 0;
+    }
+
+    .gov-title h1 {
+      font-size: 18px;
+      font-weight: 600;
+      margin-bottom: 2px;
+    }
+
+    .gov-title h2 {
+      font-size: 13px;
+      font-weight: 400;
+      opacity: 0.9;
+    }
+
+    .gov-title .hindi {
+      font-size: 14px;
+      opacity: 0.85;
+    }
+
+    .gov-nav {
+      background: #c0392b;
+      padding: 0 20px;
+      display: flex;
+      gap: 0;
+    }
+
+    .gov-nav a {
+      color: white;
+      text-decoration: none;
+      padding: 10px 16px;
+      font-size: 13px;
+      font-weight: 500;
+      transition: background 0.2s;
+    }
+
+    .gov-nav a:hover, .gov-nav a.active {
+      background: rgba(0,0,0,0.2);
+    }
+
+    /* Form container */
+    .form-container {
+      max-width: 900px;
+      margin: 24px auto;
+      padding: 0 20px;
+    }
+
+    .form-card {
+      background: white;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      overflow: hidden;
+    }
+
+    .form-header {
+      background: #f8f8f0;
+      border-bottom: 2px solid #c0392b;
+      padding: 16px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .form-header h3 {
+      font-size: 16px;
+      color: #1a472a;
+    }
+
+    .form-header .ref-no {
+      font-size: 12px;
+      color: #666;
+    }
+
+    .form-body {
+      padding: 24px;
+    }
+
+    .section-title {
+      font-size: 14px;
+      font-weight: 600;
+      color: #1a472a;
+      padding: 8px 12px;
+      background: #e8f5e9;
+      border-left: 3px solid #1a472a;
+      margin-bottom: 16px;
+      margin-top: 20px;
+    }
+
+    .section-title:first-child {
+      margin-top: 0;
+    }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin-bottom: 16px;
+    }
+
+    .form-row.full {
+      grid-template-columns: 1fr;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .form-group label {
+      font-size: 12px;
+      font-weight: 600;
+      color: #555;
+      margin-bottom: 4px;
+    }
+
+    .form-group label .required {
+      color: #c0392b;
+    }
+
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+      padding: 8px 12px;
+      border: 1px solid #ccc;
+      border-radius: 3px;
+      font-size: 13px;
+      font-family: inherit;
+      transition: border-color 0.2s;
+    }
+
+    .form-group input:focus,
+    .form-group select:focus {
+      border-color: #1a472a;
+      outline: none;
+      box-shadow: 0 0 0 2px rgba(26, 71, 42, 0.1);
+    }
+
+    .form-group input.filled {
+      background: #f0fff0;
+      border-color: #27ae60;
+    }
+
+    /* File upload */
+    .upload-area {
+      border: 2px dashed #ccc;
+      border-radius: 4px;
+      padding: 20px;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .upload-area:hover {
+      border-color: #1a472a;
+      background: #f8fff8;
+    }
+
+    .upload-area.uploaded {
+      border-color: #27ae60;
+      background: #f0fff0;
+    }
+
+    .upload-area .upload-icon {
+      font-size: 24px;
+      margin-bottom: 8px;
+    }
+
+    .upload-area .upload-text {
+      font-size: 12px;
+      color: #666;
+    }
+
+    .upload-area .upload-success {
+      color: #27ae60;
+      font-weight: 600;
+    }
+
+    /* Captcha */
+    .captcha-box {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px;
+      background: #f5f5f5;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      margin-top: 8px;
+    }
+
+    .captcha-image {
+      background: linear-gradient(45deg, #eee, #ddd);
+      padding: 8px 16px;
+      font-family: 'Courier New', monospace;
+      font-size: 20px;
+      font-weight: bold;
+      letter-spacing: 4px;
+      color: #333;
+      border: 1px solid #bbb;
+      user-select: none;
+      text-decoration: line-through;
+      font-style: italic;
+    }
+
+    .captcha-input {
+      flex: 1;
+    }
+
+    /* Checkbox */
+    .checkbox-group {
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+      margin-top: 16px;
+      padding: 12px;
+      background: #fff8e1;
+      border: 1px solid #f9a825;
+      border-radius: 4px;
+    }
+
+    .checkbox-group input[type="checkbox"] {
+      margin-top: 2px;
+    }
+
+    .checkbox-group label {
+      font-size: 12px;
+      color: #555;
+      line-height: 1.5;
+    }
+
+    /* Submit */
+    .submit-row {
+      display: flex;
+      gap: 12px;
+      margin-top: 24px;
+      padding-top: 20px;
+      border-top: 1px solid #eee;
+    }
+
+    .btn {
+      padding: 10px 32px;
+      border: none;
+      border-radius: 3px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .btn-primary {
+      background: #1a472a;
+      color: white;
+    }
+
+    .btn-primary:hover {
+      background: #2d5a3f;
+    }
+
+    .btn-secondary {
+      background: #e0e0e0;
+      color: #333;
+    }
+
+    .btn-secondary:hover {
+      background: #d0d0d0;
+    }
+
+    /* Success modal */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.5);
+      z-index: 1000;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .modal-overlay.show {
+      display: flex;
+    }
+
+    .modal {
+      background: white;
+      border-radius: 8px;
+      padding: 32px;
+      max-width: 480px;
+      text-align: center;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+    }
+
+    .modal .success-icon {
+      font-size: 48px;
+      margin-bottom: 16px;
+    }
+
+    .modal h3 {
+      color: #1a472a;
+      font-size: 20px;
+      margin-bottom: 8px;
+    }
+
+    .modal p {
+      color: #666;
+      font-size: 14px;
+      margin-bottom: 4px;
+    }
+
+    .modal .ref-number {
+      font-family: monospace;
+      font-size: 18px;
+      font-weight: bold;
+      color: #c0392b;
+      background: #f5f5f0;
+      padding: 8px 16px;
+      border-radius: 4px;
+      margin: 12px 0;
+      display: inline-block;
+    }
+
+    /* Footer */
+    .gov-footer {
+      background: #1a472a;
+      color: white;
+      padding: 16px 20px;
+      text-align: center;
+      font-size: 12px;
+      margin-top: 40px;
+      opacity: 0.9;
+    }
+  </style>
+</head>
+<body>
+  <!-- Government Header -->
+  <header class="gov-header">
+    <div class="gov-header-top">
+      <span>भारत सरकार | Government of India</span>
+      <span>Screen Reader Access | A+ A A-</span>
+    </div>
+    <div class="gov-header-main">
+      <div class="gov-emblem">🏛️</div>
+      <div class="gov-title">
+        <div class="hindi">कृषि एवं किसान कल्याण मंत्रालय</div>
+        <h1>Ministry of Agriculture & Farmers' Welfare</h1>
+        <h2>PM-KISAN Samman Nidhi — New Application</h2>
+      </div>
+    </div>
+    <nav class="gov-nav">
+      <a href="#">Home</a>
+      <a href="#" class="active">New Registration</a>
+      <a href="#">Check Status</a>
+      <a href="#">Beneficiary List</a>
+      <a href="#">Help</a>
+    </nav>
+  </header>
+
+  <!-- Application Form -->
+  <div class="form-container">
+    <div class="form-card">
+      <div class="form-header">
+        <h3>📝 PM-KISAN New Beneficiary Registration Form</h3>
+        <span class="ref-no">Form ID: PMKISAN-2026-REG</span>
+      </div>
+
+      <div class="form-body">
+        <!-- Personal Details -->
+        <div class="section-title">📋 Personal Details</div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>Full Name (as per Aadhaar) <span class="required">*</span></label>
+            <input type="text" id="fullName" placeholder="Enter full name" />
+          </div>
+          <div class="form-group">
+            <label>Father's / Husband's Name <span class="required">*</span></label>
+            <input type="text" id="fatherName" placeholder="Enter father's/husband's name" />
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>Aadhaar Number <span class="required">*</span></label>
+            <input type="text" id="aadhaarNumber" placeholder="XXXX XXXX XXXX" maxlength="14" />
+          </div>
+          <div class="form-group">
+            <label>Date of Birth <span class="required">*</span></label>
+            <input type="date" id="dob" />
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>Gender <span class="required">*</span></label>
+            <select id="gender">
+              <option value="">-- Select --</option>
+              <option value="male">Male</option>
+              <option value="female">Female</option>
+              <option value="other">Other</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Mobile Number <span class="required">*</span></label>
+            <input type="tel" id="mobile" placeholder="10-digit mobile number" maxlength="10" />
+          </div>
+        </div>
+
+        <!-- Address -->
+        <div class="section-title">🏠 Address Details</div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>State <span class="required">*</span></label>
+            <select id="state">
+              <option value="">-- Select State --</option>
+              <option value="UP">Uttar Pradesh</option>
+              <option value="MP">Madhya Pradesh</option>
+              <option value="RJ">Rajasthan</option>
+              <option value="MH">Maharashtra</option>
+              <option value="BR">Bihar</option>
+              <option value="GJ">Gujarat</option>
+              <option value="TN">Tamil Nadu</option>
+              <option value="KA">Karnataka</option>
+              <option value="AP">Andhra Pradesh</option>
+              <option value="TG">Telangana</option>
+              <option value="OD">Odisha</option>
+              <option value="WB">West Bengal</option>
+              <option value="PB">Punjab</option>
+              <option value="HR">Haryana</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>District <span class="required">*</span></label>
+            <input type="text" id="district" placeholder="Enter district" />
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>Block / Tehsil <span class="required">*</span></label>
+            <input type="text" id="block" placeholder="Enter block/tehsil" />
+          </div>
+          <div class="form-group">
+            <label>Village <span class="required">*</span></label>
+            <input type="text" id="village" placeholder="Enter village name" />
+          </div>
+        </div>
+
+        <!-- Land Details -->
+        <div class="section-title">🌾 Land Details</div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>Survey / Khasra Number <span class="required">*</span></label>
+            <input type="text" id="surveyNo" placeholder="Enter survey/khasra number" />
+          </div>
+          <div class="form-group">
+            <label>Total Land Area (Hectares) <span class="required">*</span></label>
+            <input type="number" id="landArea" placeholder="e.g., 2.5" step="0.1" />
+          </div>
+        </div>
+
+        <!-- Bank Details -->
+        <div class="section-title">🏦 Bank Account Details (for DBT)</div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>Bank Name <span class="required">*</span></label>
+            <input type="text" id="bankName" placeholder="Enter bank name" />
+          </div>
+          <div class="form-group">
+            <label>Account Number <span class="required">*</span></label>
+            <input type="text" id="accountNumber" placeholder="Enter account number" />
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>IFSC Code <span class="required">*</span></label>
+            <input type="text" id="ifscCode" placeholder="e.g., SBIN0001234" />
+          </div>
+          <div class="form-group">
+            <label>Account Holder Name <span class="required">*</span></label>
+            <input type="text" id="accountHolder" placeholder="Name as per bank records" />
+          </div>
+        </div>
+
+        <!-- Documents -->
+        <div class="section-title">📄 Upload Documents</div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>Aadhaar Card (Front & Back) <span class="required">*</span></label>
+            <div class="upload-area" id="aadhaarUpload">
+              <div class="upload-icon">📎</div>
+              <div class="upload-text">Click to upload Aadhaar Card</div>
+            </div>
+          </div>
+          <div class="form-group">
+            <label>Land Ownership Record (Khatauni) <span class="required">*</span></label>
+            <div class="upload-area" id="landUpload">
+              <div class="upload-icon">📎</div>
+              <div class="upload-text">Click to upload Land Record</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Captcha -->
+        <div class="section-title">🔒 Verification</div>
+
+        <div class="captcha-box">
+          <div class="captcha-image" id="captchaText">A7x2K9</div>
+          <div class="captcha-input form-group" style="margin: 0;">
+            <label>Enter Captcha <span class="required">*</span></label>
+            <input type="text" id="captchaInput" placeholder="Enter text shown" />
+          </div>
+        </div>
+
+        <!-- Declaration -->
+        <div class="checkbox-group">
+          <input type="checkbox" id="declaration" />
+          <label for="declaration">
+            I hereby declare that the information furnished above is true, complete and correct to the best of my knowledge and belief. I understand that in the event of any information being found false or incorrect, my registration shall be liable to be cancelled and any benefit received shall be recovered.
+            <br><br>
+            मैं घोषणा करता/करती हूँ कि ऊपर दी गई जानकारी मेरी जानकारी के अनुसार सत्य, पूर्ण और सही है।
+          </label>
+        </div>
+
+        <!-- Submit -->
+        <div class="submit-row">
+          <button class="btn btn-primary" id="submitBtn" onclick="submitForm()">Submit Application</button>
+          <button class="btn btn-secondary" onclick="window.location.reload()">Reset Form</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Success Modal -->
+  <div class="modal-overlay" id="successModal">
+    <div class="modal">
+      <div class="success-icon">✅</div>
+      <h3>Application Submitted Successfully!</h3>
+      <p>आवेदन सफलतापूर्वक जमा हो गया!</p>
+      <div class="ref-number" id="refNumber">PMKISAN-2026-847291</div>
+      <p>Please save this reference number for future tracking.</p>
+      <p style="margin-top: 12px; font-size: 12px; color: #888;">
+        कृपया इस संदर्भ संख्या को भविष्य में ट्रैकिंग के लिए सहेजें।
+      </p>
+    </div>
+  </div>
+
+  <footer class="gov-footer">
+    Content Owned by Ministry of Agriculture & Farmers' Welfare, Government of India |
+    Designed & Developed by National Informatics Centre (NIC)
+  </footer>
+
+  <script>
+    function submitForm() {
+      const ref = 'PMKISAN-2026-' + Math.floor(100000 + Math.random() * 900000);
+      document.getElementById('refNumber').textContent = ref;
+      document.getElementById('successModal').classList.add('show');
+    }
+
+    // Mark fields as filled when they have values
+    document.querySelectorAll('input, select').forEach(el => {
+      el.addEventListener('change', () => {
+        if (el.value) el.classList.add('filled');
+        else el.classList.remove('filled');
+      });
+      el.addEventListener('input', () => {
+        if (el.value) el.classList.add('filled');
+        else el.classList.remove('filled');
+      });
+    });
+  </script>
+</body>
+</html>
